@@ -1,0 +1,174 @@
+'use client';
+
+import * as React from 'react';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
+import { format, set, parse } from 'date-fns';
+import { cn } from '@/lib/utils';
+import { calculateUpcomingMilestones, type Milestone } from '@/lib/milestones';
+import { Button } from '@/components/ui/button';
+import { Calendar } from '@/components/ui/calendar';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover';
+import { Input } from '@/components/ui/input';
+import { Calendar as CalendarIcon, Clock } from 'lucide-react';
+import { useToast } from "@/hooks/use-toast";
+
+const formSchema = z.object({
+  dobDate: z.date({
+    required_error: 'Date of birth is required.',
+  }),
+  dobTime: z.string().regex(/^([01]\d|2[0-3]):([0-5]\d)$/, {
+    message: 'Time must be in HH:mm format.',
+  }),
+});
+
+type BirthdayFormProps = {
+  onMilestonesCalculated: (milestones: Milestone[], birthDate: Date) => void;
+};
+
+export default function BirthdayForm({ onMilestonesCalculated }: BirthdayFormProps) {
+  const { toast } = useToast();
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+        // Set a reasonable default, e.g., 25 years ago today at noon
+        dobDate: set(new Date(), { year: new Date().getFullYear() - 25 }),
+        dobTime: "12:00",
+    }
+  });
+
+  function onSubmit(values: z.infer<typeof formSchema>) {
+    try {
+      const [hours, minutes] = values.dobTime.split(':').map(Number);
+      // Round minutes to nearest 5
+      const roundedMinutes = Math.round(minutes / 5) * 5;
+      const birthDateTime = set(values.dobDate, { hours, minutes: roundedMinutes, seconds: 0, milliseconds: 0 });
+
+      if (birthDateTime > new Date()) {
+         toast({
+            title: "Invalid Date",
+            description: "Birth date cannot be in the future.",
+            variant: "destructive",
+          });
+        return;
+      }
+
+      const milestones = calculateUpcomingMilestones(birthDateTime);
+      onMilestonesCalculated(milestones, birthDateTime);
+       toast({
+        title: "Milestones Calculated!",
+        description: "Check out your upcoming reasons to celebrate.",
+      });
+    } catch (error) {
+      console.error("Error calculating milestones:", error);
+       toast({
+        title: "Calculation Error",
+        description: "Could not calculate milestones. Please check your input.",
+        variant: "destructive",
+      });
+    }
+  }
+
+  // Function to generate time options in 5-minute intervals
+  const timeOptions = React.useMemo(() => {
+    const options = [];
+    for (let h = 0; h < 24; h++) {
+      for (let m = 0; m < 60; m += 5) {
+        const hour = h.toString().padStart(2, '0');
+        const minute = m.toString().padStart(2, '0');
+        options.push(`${hour}:${minute}`);
+      }
+    }
+    return options;
+  }, []);
+
+
+  return (
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+        <FormField
+          control={form.control}
+          name="dobDate"
+          render={({ field }) => (
+            <FormItem className="flex flex-col">
+              <FormLabel>Date of Birth</FormLabel>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <FormControl>
+                    <Button
+                      variant={'outline'}
+                      className={cn(
+                        'w-full pl-3 text-left font-normal',
+                        !field.value && 'text-muted-foreground'
+                      )}
+                    >
+                      {field.value ? (
+                        format(field.value, 'PPP')
+                      ) : (
+                        <span>Pick a date</span>
+                      )}
+                      <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                    </Button>
+                  </FormControl>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0" align="start">
+                  <Calendar
+                    mode="single"
+                    selected={field.value}
+                    onSelect={field.onChange}
+                    disabled={(date) =>
+                      date > new Date() || date < new Date('1900-01-01')
+                    }
+                    initialFocus
+                    captionLayout="dropdown-buttons"
+                    fromYear={1900}
+                    toYear={new Date().getFullYear()}
+                  />
+                </PopoverContent>
+              </Popover>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="dobTime"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Time of Birth (approx. 5 min)</FormLabel>
+              <div className="relative">
+                <FormControl>
+                   <Input
+                    type="time"
+                    step="300" // 5 minutes in seconds
+                    className="pr-10"
+                    {...field}
+                   />
+                </FormControl>
+                 <Clock className="absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+              </div>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <Button type="submit" className="w-full bg-accent hover:bg-accent/90 text-accent-foreground">
+          Calculate Milestones
+        </Button>
+      </form>
+    </Form>
+  );
+}
