@@ -54,6 +54,20 @@ export default function BirthdayForm({
 }: BirthdayFormProps) {
   const { toast } = useToast();
   const router = useRouter();
+
+  // Debug helper for date objects
+  const logDate = (label: string, date?: Date | null) => {
+    if (!date) {
+      console.log(`${label}: null or undefined`);
+      return;
+    }
+    console.log(
+      `${label}: ${date.toISOString()} (Year: ${date.getFullYear()}, Month: ${date.getMonth()}, Day: ${date.getDate()}, Hour: ${date.getHours()}, Minute: ${date.getMinutes()})`
+    );
+  };
+
+  logDate("initialBirthDate in BirthdayForm", initialBirthDate);
+
   const timeOptions = React.useMemo(() => {
     const options = [];
     for (let h = 0; h < 24; h++) {
@@ -73,8 +87,9 @@ export default function BirthdayForm({
         dobTime: format(initialBirthDate, "HH:mm"),
       };
     }
+    // Default to January 1, current year - 25, at 12:00
     return {
-      dobDate: set(new Date(), { year: new Date().getFullYear() - 25 }),
+      dobDate: new Date(new Date().getFullYear() - 25, 0, 1),
       dobTime: "12:00",
     };
   }, [initialBirthDate]);
@@ -83,6 +98,17 @@ export default function BirthdayForm({
     resolver: zodResolver(formSchema),
     defaultValues,
   });
+
+  // Reset form when initialBirthDate changes
+  React.useEffect(() => {
+    if (initialBirthDate) {
+      logDate("Resetting form with date", initialBirthDate);
+      form.reset({
+        dobDate: initialBirthDate,
+        dobTime: format(initialBirthDate, "HH:mm"),
+      });
+    }
+  }, [initialBirthDate, form]);
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     try {

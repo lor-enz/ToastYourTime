@@ -78,6 +78,7 @@ export default function MilestonePage({
         const calculatedMilestones = calculateUpcomingMilestones(date);
         setBirthDate(date);
         setMilestones(calculatedMilestones);
+        console.log("Loaded birth date from URL:", date);
         setError("");
       } catch (err) {
         console.error("Error parsing date:", err);
@@ -87,6 +88,9 @@ export default function MilestonePage({
         setBirthDate(null);
         setMilestones([]);
       }
+    } else {
+      // When there's no initialDateParam, make sure birthDate is null
+      setBirthDate(null);
     }
   }, [initialDateParam]);
 
@@ -150,7 +154,7 @@ export default function MilestonePage({
             <CardContent>
               <BirthdayForm
                 onMilestonesCalculated={handleMilestonesCalculated}
-                initialBirthDate={birthDate || undefined}
+                initialBirthDate={birthDate ? new Date(birthDate) : undefined}
               />
             </CardContent>
           </Card>
