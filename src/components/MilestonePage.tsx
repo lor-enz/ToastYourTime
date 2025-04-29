@@ -161,7 +161,7 @@ export default function MilestonePage({
 
           {milestones.length > 0 && birthDate ? (
             <>
-              <div className="w-full max-w-md flex justify-end">
+              <div className="flex justify-center">
                 <button
                   onClick={handleCopyShareLink}
                   className="text-sm flex items-center gap-1 text-muted-foreground hover:text-primary transition-colors">

@@ -15,7 +15,7 @@ import {
   formatDistanceStrict,
 } from "date-fns";
 import { Badge } from "@/components/ui/badge";
-import { CalendarClock, TrendingUp, CheckCircle } from "lucide-react";
+import { CalendarClock, TrendingUp, CheckCircle, Cake } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 import {
   Tooltip,
@@ -145,24 +145,7 @@ export default function MilestoneList({
   return (
     <div className="w-full max-w-4xl mx-auto space-y-6">
       <h2 className="text-3xl font-semibold text-center text-primary flex items-center justify-center gap-2">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          className="lucide lucide-cake-slice">
-          <path d="m11.16 7.89-7.1 7.1C3.78 15.27 4 15.62 4 16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2 0-.38-.22-.73-.51-1.01l-7.1-7.1c-.19-.18-.44-.29-.73-.29-.29 0-.54.11-.73.29Z" />
-          <path d="M16 16h4" />
-          <path d="M4 16h4" />
-          <path d="M12 3v5.72c0 .29-.12.57-.32.76L8 12.72V16" />
-          <path d="M16 12.72c-.2-.2-.32-.48-.32-.77V3" />
-          <path d="M16 9.5a2.5 2.5 0 0 1-5 0 2.5 2.5 0 0 1 5 0Z" />
-        </svg>
+        <Cake className="w-6 h-6 text-accent" />
         Your Milestones
       </h2>
 
