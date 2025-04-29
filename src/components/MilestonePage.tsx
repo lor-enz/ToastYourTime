@@ -112,7 +112,7 @@ export default function MilestonePage({
   };
 
   return (
-    <div className="flex flex-col items-center space-y-8 min-h-full">
+    <div className="flex flex-col items-center space-y-8 min-h-full ">
       <header className="text-center space-y-2">
         <h1 className="text-4xl md:text-5xl font-bold text-primary flex items-center justify-center gap-3">
           <PartyPopper className="w-10 h-10 text-accent" />
@@ -123,7 +123,7 @@ export default function MilestonePage({
         </p>
       </header>
 
-      <main className="container max-w-5xl py-4 md:py-10">
+      <main className="container max-w-4xl py-4 md:py-10">
         <div className="flex flex-col space-y-8">
           <div className="flex flex-col space-y-2">
             <h1 className="text-3xl font-bold tracking-tight">
