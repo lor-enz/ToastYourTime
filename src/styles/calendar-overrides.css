@@ -1,0 +1,43 @@
+/* Calendar dropdown overrides */
+.rdp-dropdown_year {
+  min-width: 90px !important; /* Increase minimum width */
+  padding-right: 24px !important; /* Add padding for the scrollbar */
+}
+
+/* Increase width of year items in the dropdown */
+.rdp-dropdown_year option {
+  padding-right: 10px !important;
+}
+
+/* Custom calendar layout */
+.custom-calendar-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Custom caption layout */
+.rdp-caption {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: 4px;
+  margin-bottom: 8px;
+}
+
+.rdp-caption_dropdowns {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+}
+
+/* Make sure the calendar has proper spacing for the bottom buttons */
+.rdp-months {
+  margin-bottom: 0;
+}
+
+/* Navigation buttons styling */
+.custom-calendar-wrapper button[name="previous-month"],
+.custom-calendar-wrapper button[name="next-month"] {
+  transition: opacity 0.2s, background-color 0.2s;
+}

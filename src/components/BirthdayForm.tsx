@@ -8,7 +8,7 @@ import { format, set, parse } from "date-fns";
 import { cn } from "@/lib/utils";
 import { calculateUpcomingMilestones, type Milestone } from "@/lib/milestones";
 import { Button } from "@/components/ui/button";
-import { Calendar } from "@/components/ui/calendar";
+import { CustomCalendar } from "@/components/CustomCalendar";
 import {
   Form,
   FormControl,
@@ -33,6 +33,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+
+// Import calendar override styles
+import "@/styles/calendar-overrides.css";
 
 const formSchema = z.object({
   dobDate: z.date({
@@ -183,7 +186,7 @@ export default function BirthdayForm({
                   </FormControl>
                 </PopoverTrigger>
                 <PopoverContent className="w-auto p-0" align="start">
-                  <Calendar
+                  <CustomCalendar
                     mode="single"
                     selected={field.value}
                     onSelect={field.onChange}
@@ -195,6 +198,7 @@ export default function BirthdayForm({
                     captionLayout="dropdown-buttons"
                     fromYear={1900}
                     toYear={new Date().getFullYear()}
+                    className="custom-calendar"
                   />
                 </PopoverContent>
               </Popover>
@@ -207,12 +211,15 @@ export default function BirthdayForm({
           name="dobTime"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Time of Birth (approx. 5 min)</FormLabel>
+              <FormLabel>Time of Birth (24-hour format)</FormLabel>
               <div className="relative">
                 <FormControl>
                   <Input
                     type="time"
                     step="300" // 5 minutes in seconds
+                    pattern="[0-9]{2}:[0-9]{2}"
+                    inputMode="numeric"
+                    data-format="24h"
                     className="pr-10"
                     {...field}
                   />
