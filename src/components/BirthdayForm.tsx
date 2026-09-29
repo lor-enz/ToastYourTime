@@ -26,13 +26,6 @@ import { Input } from "@/components/ui/input";
 import { Calendar as CalendarIcon, Clock } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 
 // Import calendar override styles
 import "@/styles/calendar-overrides.css";
@@ -58,31 +51,6 @@ export default function BirthdayForm({
   const { toast } = useToast();
   const router = useRouter();
 
-  // Debug helper for date objects
-  const logDate = (label: string, date?: Date | null) => {
-    if (!date) {
-      console.log(`${label}: null or undefined`);
-      return;
-    }
-    console.log(
-      `${label}: ${date.toISOString()} (Year: ${date.getFullYear()}, Month: ${date.getMonth()}, Day: ${date.getDate()}, Hour: ${date.getHours()}, Minute: ${date.getMinutes()})`
-    );
-  };
-
-  logDate("initialBirthDate in BirthdayForm", initialBirthDate);
-
-  const timeOptions = React.useMemo(() => {
-    const options = [];
-    for (let h = 0; h < 24; h++) {
-      for (let m = 0; m < 60; m += 5) {
-        const hour = h.toString().padStart(2, "0");
-        const minute = m.toString().padStart(2, "0");
-        options.push(`${hour}:${minute}`);
-      }
-    }
-    return options;
-  }, []);
-
   const defaultValues = React.useMemo(() => {
     if (initialBirthDate) {
       return {
@@ -105,7 +73,6 @@ export default function BirthdayForm({
   // Reset form when initialBirthDate changes
   React.useEffect(() => {
     if (initialBirthDate) {
-      logDate("Resetting form with date", initialBirthDate);
       form.reset({
         dobDate: initialBirthDate,
         dobTime: format(initialBirthDate, "HH:mm"),
