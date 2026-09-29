@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import type { Milestone } from "@/lib/milestones";
+import { cn } from "@/lib/utils";
 import {
   Card,
   CardContent,
@@ -187,9 +188,4 @@ export default function MilestoneList({
       )}
     </div>
   );
-}
-
-// Helper function to safely check if a class is needed
-function cn(...classes: unknown[]): string {
-  return classes.filter(Boolean).join(" ");
 }
