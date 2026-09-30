@@ -1,43 +1,51 @@
 # ToastYourTime
 
-Calculate and display milestone dates for life events.
+Find your next reason to celebrate: enter your birth date and time, and see
+when you'll turn 1,000,000,000 seconds, 10,000 days, 2,222 weeks, 444 months
+and so on.
 
-## Getting Started
+It's a static site written in plain TypeScript: no framework and no server.
+Everything is calculated in the browser.
 
-To get started, take a look at src/app/page.tsx.
+- `index.html`: page markup
+- `src/main.ts`: form handling, share links and rendering
+- `src/milestones.ts`: the milestone calculation
+- `src/style.css`: styles
 
 ## Development
 
 ```bash
-# Install dependencies
 npm install
-
-# Run development server
-npm run dev
+npm run dev        # dev server with hot reload
+npm run build      # typecheck + production build into dist/
+npm run preview    # serve dist/ locally
 ```
 
-## Docker
+## Share links
 
-The application can be run using Docker:
+Results can be shared as `/<YYYYMMDD>_<HHmm>`, e.g. `/19900101_1200`
+(local time). The app reads the date from the path, so the web server must
+answer unknown paths with `index.html`. The dev and preview servers already do
+this, and the included nginx config does it for production.
 
-### Using Docker Compose (recommended)
+## Deployment
 
-```bash
-# Build and start the container
-docker-compose up -d
+The site is built by a short-lived Docker container that writes the static
+files to a folder on the host and then exits. Any web server can serve that
+folder. It's set up for [SWAG](https://docs.linuxserver.io/general/swag/)
+(nginx).
 
-# Stop the container
-docker-compose down
-```
+1. Build into a folder your nginx serves:
 
-### Using Docker directly
+   ```bash
+   OUTPUT_DIR=/path/to/swag/config/www/toastyourtime docker compose run --rm build
+   ```
 
-```bash
-# Build the Docker image
-docker build -t toastyourtime .
+   `OUTPUT_DIR` can also go into a `.env` file next to `docker-compose.yml`.
 
-# Run the container
-docker run -p 3000:3000 toastyourtime
-```
+2. Once, copy `deploy/toastyourtime.subdomain.conf` to SWAG's
+   `/config/nginx/site-confs/`, adjust `server_name` and `root`, and restart
+   SWAG.
 
-Access the application at http://localhost:3000.
+To update the live site, run `git pull` followed by the build command from
+step 1. The site can be briefly incomplete while the build replaces the files.

@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>ToastYourTime</title>
+    <meta name="description" content="Celebrate every moment! Find your next age milestone." />
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="apple-touch-icon" href="/android-chrome-512x512.png" />
+    <script type="module" src="/src/main.ts"></script>
+  </head>
+  <body>
+    <main class="page">
+      <header class="page-header">
+        <h1><span data-icon="party-popper"></span>ToastYourTime</h1>
+        <p>Find your next reason to celebrate! Enter your birth date and time.</p>
+      </header>
+
+      <div id="url-error" class="alert" role="alert" hidden>
+        <span data-icon="circle-alert"></span>
+        <div>
+          <strong>Invalid link</strong>
+          <p>
+            The date in this link couldn't be read. It should look like
+            <code>/YYYYMMDD_HHmm</code> and be a date in the past.
+          </p>
+        </div>
+      </div>
+
+      <form id="birthday-form" class="card form" novalidate>
+        <h2>Enter your birth date &amp; time</h2>
+        <p class="muted">We'll calculate your upcoming milestones from it.</p>
+
+        <label>
+          Date of birth
+          <input id="dob-date" name="date" type="date" min="1900-01-01" required />
+        </label>
+        <label>
+          Time of birth
+          <input id="dob-time" name="time" type="time" step="300" required />
+        </label>
+        <p id="form-error" class="field-error" role="alert" hidden></p>
+
+        <button type="submit" class="button">Calculate milestones</button>
+      </form>
+
+      <section id="results" hidden>
+        <button id="share" type="button" class="link-button">
+          <span data-icon="share-2"></span><span id="share-label">Copy share link</span>
+        </button>
+        <hr />
+        <h2 class="section-title"><span data-icon="cake"></span>Your milestones</h2>
+        <div id="upcoming" class="grid"></div>
+        <p id="no-upcoming" class="muted center" hidden>
+          No upcoming milestones found. Check back later!
+        </p>
+        <div id="passed-section" hidden>
+          <h3 class="section-subtitle">Recently passed</h3>
+          <div id="passed" class="grid"></div>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>
