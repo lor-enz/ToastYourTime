@@ -1,7 +1,15 @@
 import "@fontsource-variable/geist";
 import "./style.css";
 
-import { format, formatDistanceStrict, isValid, parse } from "date-fns";
+import {
+  format,
+  formatDistanceStrict,
+  formatDuration,
+  intervalToDuration,
+  isValid,
+  parse,
+  type Duration,
+} from "date-fns";
 import {
   Cake,
   CalendarClock,
@@ -117,6 +125,47 @@ function milestoneCard(milestone: Milestone, birthDate: Date, now: Date, isNext:
   );
 }
 
+/** The largest units that apply: "1 year 9 months", "12 days", "20 minutes". */
+const GAP_FORMATS: (keyof Duration)[][] = [
+  ["years", "months"],
+  ["days"],
+  ["hours"],
+  ["minutes"],
+  ["seconds"],
+];
+
+function formatGap(from: Date, to: Date): string {
+  const duration = intervalToDuration({ start: from, end: to });
+  for (const units of GAP_FORMATS) {
+    const text = formatDuration(duration, { format: units });
+    if (text) return text;
+  }
+  return "";
+}
+
+/**
+ * Space between two timeline cards, growing with the time between them.
+ * The square root keeps multi-year gaps from turning into huge empty stretches.
+ */
+function gapHeightRem(from: Date, to: Date): number {
+  const days = (to.getTime() - from.getTime()) / 86_400_000;
+  return Math.min(9, 1.75 + Math.sqrt(days) * 0.2);
+}
+
+function timeline(milestones: Milestone[], birthDate: Date, now: Date): Node[] {
+  return milestones.flatMap((m, i) => {
+    const card = milestoneCard(m, birthDate, now, i === 0);
+    if (i === 0) return [card];
+    const prev = milestones[i - 1].date;
+    const gap = h(
+      "div",
+      { class: "timeline-gap", style: `height: ${gapHeightRem(prev, m.date).toFixed(2)}rem` },
+      formatGap(prev, m.date),
+    );
+    return [gap, card];
+  });
+}
+
 function showMilestones(birthDate: Date) {
   const now = new Date();
   const milestones = calculateMilestones(birthDate, now);
@@ -126,9 +175,7 @@ function showMilestones(birthDate: Date) {
     .reverse()
     .slice(0, RECENTLY_PASSED_LIMIT);
 
-  $("upcoming").replaceChildren(
-    ...upcoming.map((m, i) => milestoneCard(m, birthDate, now, i === 0)),
-  );
+  $("upcoming").replaceChildren(...timeline(upcoming, birthDate, now));
   $("no-upcoming").hidden = upcoming.length > 0;
   $("passed").replaceChildren(...passed.map((m) => milestoneCard(m, birthDate, now, false)));
   $("passed-section").hidden = passed.length === 0;

@@ -269,6 +269,56 @@ hr {
   gap: 1rem;
 }
 
+/* Timeline of upcoming milestones */
+
+.timeline {
+  position: relative;
+  width: 100%;
+  max-width: 36rem;
+  margin: 0 auto;
+  padding-left: 2.25rem;
+}
+
+/* The vertical line. */
+.timeline::before {
+  content: "";
+  position: absolute;
+  top: 1rem;
+  bottom: 1rem;
+  left: 0.7rem;
+  width: 2px;
+  background: var(--border);
+}
+
+/* A dot on the line for every milestone. */
+.timeline .milestone {
+  position: relative;
+  min-height: 0;
+}
+
+.timeline .milestone::before {
+  content: "";
+  position: absolute;
+  top: 1.15rem;
+  left: -1.85rem;
+  width: 0.75rem;
+  height: 0.75rem;
+  border-radius: 50%;
+  background: var(--highlight);
+  box-shadow: 0 0 0 3px var(--background);
+}
+
+.timeline .milestone.is-next::before {
+  background: var(--accent);
+}
+
+.timeline-gap {
+  display: flex;
+  align-items: center;
+  color: var(--muted-foreground);
+  font-size: 0.8rem;
+}
+
 /* Milestone card */
 
 .milestone {
