@@ -1,0 +1,24 @@
+# Monthly dependency updates. The deploy workflow test-builds every PR,
+# so an update is safe to merge once its check is green.
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: monthly
+    commit-message:
+      prefix: "⬆️"
+    groups:
+      # One PR for all minor and patch updates; major updates get their own.
+      npm-minor-and-patch:
+        update-types: [minor, patch]
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly
+    commit-message:
+      prefix: "⬆️"
+    groups:
+      github-actions:
+        patterns: ["*"]
