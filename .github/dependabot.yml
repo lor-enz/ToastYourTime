@@ -1,11 +1,13 @@
 # Monthly dependency updates. The deploy workflow test-builds every PR,
 # so an update is safe to merge once its check is green.
+# Every update PR is assigned to lor-enz, so it shows up as a phone notification.
 version: 2
 updates:
   - package-ecosystem: npm
     directory: /
     schedule:
       interval: monthly
+    assignees: ["lor-enz"]
     commit-message:
       prefix: "⬆️"
     groups:
@@ -17,6 +19,7 @@ updates:
     directory: /
     schedule:
       interval: monthly
+    assignees: ["lor-enz"]
     commit-message:
       prefix: "⬆️"
     groups:
