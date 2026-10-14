@@ -24,7 +24,7 @@ type UnitConfig = {
 };
 
 const UNITS: Record<Unit, UnitConfig> = {
-  seconds: { add: addSeconds, maxRepeatingDigits: 9, lookbackHours: 24 },
+  seconds: { add: addSeconds, maxRepeatingDigits: 10, lookbackHours: 24 },
   minutes: { add: addMinutes, maxRepeatingDigits: 9, lookbackHours: 24 },
   hours: { add: addHours, maxRepeatingDigits: 6, lookbackHours: 24 },
   days: { add: addDays, maxRepeatingDigits: 5, lookbackHours: 7 * 24 },
