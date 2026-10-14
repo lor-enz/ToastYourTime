@@ -46,6 +46,12 @@ for (let zeros = 0; zeros <= 10; zeros++) {
   }
 }
 
+/** 123, 1234, …, 1234567890. */
+const SEQUENCE_NUMBERS: number[] = [];
+for (let digits = 3; digits <= 10; digits++) {
+  SEQUENCE_NUMBERS.push(Number("1234567890".slice(0, digits)));
+}
+
 /** 11, 22, …, 999, 1111, … up to `maxDigits` digits. */
 function repeatingDigitNumbers(maxDigits: number): number[] {
   const numbers: number[] = [];
@@ -64,6 +70,7 @@ export function calculateMilestones(birthDate: Date, now = new Date()): Mileston
     const cutoff = addHours(now, -config.lookbackHours);
     const values = new Set([
       ...ROUND_NUMBERS,
+      ...SEQUENCE_NUMBERS,
       ...repeatingDigitNumbers(config.maxRepeatingDigits),
     ]);
     for (const value of values) {
