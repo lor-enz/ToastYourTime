@@ -1,16 +1,18 @@
 :root {
-  --background: hsl(39 58% 90%);
-  --foreground: hsl(224 38% 19%);
-  --card: hsl(39 58% 93%);
-  --primary: hsl(188 93% 34%);
-  --secondary: hsl(60 5% 45%);
-  --muted-foreground: hsl(60 5% 25%);
-  --accent: hsl(11 59% 66%);
-  --accent-hover: hsl(11 59% 60%);
-  --destructive: hsl(0 72% 51%);
+  --background: #f1f3f6;
+  --foreground: #1f2329;
+  --card: #ffffff;
+  --muted-foreground: #5b6472;
+  --accent: #b45309;
+  --accent-hover: #92400e;
+  /* Lighter amber for icons and progress bars. */
+  --highlight: #ca6c06;
+  --track: #e8ecf1;
+  --passed: #f4f6f8;
+  --destructive: #b91c1c;
   --success: hsl(142 72% 29%);
-  --border: hsl(60 5% 80%);
-  --input: hsl(39 45% 86%);
+  --border: #e1e5eb;
+  --input: #d5dae1;
   --radius: 0.5rem;
 
   color-scheme: light;
@@ -81,13 +83,13 @@ p {
   font-size: clamp(2.25rem, 6vw, 3rem);
   font-weight: 700;
   line-height: 1.1;
-  color: var(--primary);
+  color: var(--foreground);
 }
 
 .page-header h1 .icon {
   width: 2.5rem;
   height: 2.5rem;
-  color: var(--accent);
+  color: var(--highlight);
 }
 
 .page-header p {
@@ -102,7 +104,7 @@ p {
   background: var(--card);
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  box-shadow: 0 1px 2px rgb(0 0 0 / 0.05);
+  box-shadow: 0 1px 2px rgb(15 23 42 / 0.05);
 }
 
 /* Form */
@@ -139,7 +141,7 @@ input {
   padding: 0.5rem 0.75rem;
   border: 1px solid var(--input);
   border-radius: calc(var(--radius) - 2px);
-  background: var(--background);
+  background: var(--card);
   color: inherit;
   font: inherit;
   font-size: 1rem;
@@ -181,7 +183,7 @@ button:focus-visible {
   display: flex;
   gap: 0.75rem;
   padding: 1rem;
-  border: 1px solid hsl(0 72% 51% / 0.5);
+  border: 1px solid rgb(185 28 28 / 0.4);
   border-radius: var(--radius);
   color: var(--destructive);
   font-size: 0.875rem;
@@ -228,7 +230,7 @@ button:focus-visible {
 }
 
 .link-button:hover {
-  color: var(--primary);
+  color: var(--accent);
 }
 
 hr {
@@ -245,13 +247,13 @@ hr {
   gap: 0.5rem;
   font-size: 1.875rem;
   font-weight: 600;
-  color: var(--primary);
+  color: var(--foreground);
 }
 
 .section-title .icon {
   width: 1.5rem;
   height: 1.5rem;
-  color: var(--accent);
+  color: var(--highlight);
 }
 
 .section-subtitle {
@@ -280,17 +282,17 @@ hr {
 }
 
 .milestone:hover {
-  box-shadow: 0 4px 6px rgb(0 0 0 / 0.1);
+  box-shadow: 0 4px 6px rgb(15 23 42 / 0.1);
 }
 
 .milestone.is-next {
   border-color: var(--accent);
-  box-shadow: 0 0 0 2px var(--accent), 0 10px 15px rgb(0 0 0 / 0.1);
+  box-shadow: 0 0 0 2px var(--accent), 0 10px 15px rgb(15 23 42 / 0.1);
 }
 
 .milestone.is-passed {
   opacity: 0.7;
-  background: hsl(60 5% 88%);
+  background: var(--passed);
 }
 
 .milestone-title {
@@ -302,7 +304,7 @@ hr {
 .milestone-value {
   font-size: 1.125rem;
   font-weight: 600;
-  color: var(--primary);
+  color: var(--accent);
 }
 
 .milestone-unit {
@@ -340,13 +342,13 @@ hr {
 .progress {
   height: 0.5rem;
   border-radius: 999px;
-  background: var(--secondary);
+  background: var(--track);
   overflow: hidden;
 }
 
 .progress-bar {
   height: 100%;
-  background: var(--primary);
+  background: var(--highlight);
 }
 
 @keyframes fade-in {
