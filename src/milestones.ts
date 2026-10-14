@@ -32,7 +32,7 @@ const UNITS: Record<Unit, UnitConfig> = {
   months: { add: addMonths, maxRepeatingDigits: 4, lookbackHours: 7 * 24 },
 };
 
-const MAX_RESULTS = 50;
+const MAX_UPCOMING = 50;
 
 /**
  * One significant digit or a half step, followed by up to ten zeros:
@@ -80,9 +80,14 @@ export function calculateMilestones(birthDate: Date, now = new Date()): Mileston
     }
   }
 
-  return milestones
+  const sorted = milestones
     .sort((a, b) => a.date.getTime() - b.date.getTime())
     // Keep only the first milestone for any exact same moment.
-    .filter((m, i, all) => i === 0 || m.date.getTime() !== all[i - 1].date.getTime())
-    .slice(0, MAX_RESULTS);
+    .filter((m, i, all) => i === 0 || m.date.getTime() !== all[i - 1].date.getTime());
+
+  // Limit only the upcoming ones: for a newborn, the many recently passed
+  // seconds milestones would otherwise use up every slot.
+  const passed = sorted.filter((m) => m.date <= now);
+  const upcoming = sorted.filter((m) => m.date > now).slice(0, MAX_UPCOMING);
+  return [...passed, ...upcoming];
 }
