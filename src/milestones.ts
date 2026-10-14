@@ -34,11 +34,15 @@ const UNITS: Record<Unit, UnitConfig> = {
 
 const MAX_RESULTS = 50;
 
-/** 1–99 followed by up to ten zeros: 7, 40, 250, 1000, 99000000000, … */
+/**
+ * One significant digit or a half step, followed by up to ten zeros:
+ * 7, 15, 40, 250, 1000, 300000, 9500000000, …
+ * Numbers like 280000 or 4700 are left out on purpose: they aren't worth a toast.
+ */
 const ROUND_NUMBERS: number[] = [];
-for (let base = 1; base <= 99; base++) {
-  for (let zeros = 0; zeros <= 10; zeros++) {
-    ROUND_NUMBERS.push(base * 10 ** zeros);
+for (let zeros = 0; zeros <= 10; zeros++) {
+  for (let d = 1; d <= 9; d++) {
+    ROUND_NUMBERS.push(d * 10 ** zeros, (d * 10 + 5) * 10 ** zeros);
   }
 }
 
